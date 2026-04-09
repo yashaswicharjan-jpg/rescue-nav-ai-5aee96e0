@@ -1,7 +1,11 @@
 import { useState, useRef } from "react";
-import { Camera, Upload, AlertTriangle, Loader2 } from "lucide-react";
+import { Camera, Upload, Loader2 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/lib/translations";
 
 export const VisualDetection = () => {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language.code);
   const [image, setImage] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -19,7 +23,6 @@ export const VisualDetection = () => {
 
   const analyzeImage = () => {
     setAnalyzing(true);
-    // Simulated analysis — will be replaced with real AI
     setTimeout(() => {
       setResult(
         "## Analysis Result\n\n⚠️ **Potential structural damage detected**\n\n### Recommendations:\n1. Do NOT enter the building\n2. Maintain safe distance (50+ meters)\n3. Report to emergency services\n4. Watch for falling debris\n\n🔴 Risk Level: **HIGH**"
@@ -32,7 +35,7 @@ export const VisualDetection = () => {
     <div className="space-y-4 p-4">
       <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
         <Camera className="h-4 w-4 text-accent" />
-        Visual Danger Detection
+        {t("visual_detection")}
       </h2>
 
       {!image ? (
@@ -50,8 +53,8 @@ export const VisualDetection = () => {
               </div>
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-foreground">Capture or Upload Image</p>
-              <p className="text-xs text-muted-foreground">AI will analyze for dangers</p>
+              <p className="text-sm font-medium text-foreground">{t("capture_upload")}</p>
+              <p className="text-xs text-muted-foreground">{t("ai_analyze")}</p>
             </div>
           </button>
           <input
@@ -69,7 +72,7 @@ export const VisualDetection = () => {
           {analyzing ? (
             <div className="flex items-center gap-2 rounded-lg bg-secondary p-4">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
-              <span className="text-sm text-foreground">Analyzing image for dangers...</span>
+              <span className="text-sm text-foreground">{t("analyzing")}</span>
             </div>
           ) : result ? (
             <div className="rounded-lg border border-warning/30 bg-warning/5 p-4">
@@ -86,7 +89,7 @@ export const VisualDetection = () => {
             onClick={() => { setImage(null); setResult(null); }}
             className="w-full rounded-lg bg-secondary py-2 text-sm text-secondary-foreground hover:bg-muted"
           >
-            Scan Another Image
+            {t("scan_another")}
           </button>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/lib/translations";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -9,24 +10,14 @@ interface Message {
   content: string;
 }
 
-const SYSTEM_PROMPT = `You are SafePath CrisisNav AI — a real-time behavioral guidance system designed to help users survive wars, disasters, and emergencies. 
-
-RULES:
-- Give CLEAR, ACTIONABLE survival instructions
-- Be CONCISE — lives may depend on speed
-- Prioritize SAFETY above all
-- If unsure about a situation, default to universal safety: "Seek shelter, stay low, avoid open areas"
-- Always respond in the user's language
-- Use numbered steps for instructions
-- Include urgency levels when relevant`;
-
 export const ChatInterface = () => {
   const { language } = useLanguage();
+  const { t } = useTranslation(language.code);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
       role: "assistant",
-      content: "🛡️ **SafePath AI Active**\n\nI'm your crisis guidance assistant. Ask me anything about:\n- Emergency survival steps\n- Evacuation routes\n- First aid guidance\n- Situation assessment\n\nYour safety is my priority.",
+      content: `## ${t("welcome_title")}\n\n${t("welcome_msg")}`,
     },
   ]);
   const [input, setInput] = useState("");
@@ -36,6 +27,13 @@ export const ChatInterface = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef(window.speechSynthesis);
+
+  // Update welcome message when language changes
+  useEffect(() => {
+    setMessages((prev) => prev.map((m) =>
+      m.id === "welcome" ? { ...m, content: `## ${t("welcome_title")}\n\n${t("welcome_msg")}` } : m
+    ));
+  }, [language.code]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -90,7 +88,6 @@ export const ChatInterface = () => {
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response (will be replaced with real Lovable AI integration)
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -104,7 +101,6 @@ export const ChatInterface = () => {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -128,7 +124,7 @@ export const ChatInterface = () => {
                   className="mt-1.5 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"
                 >
                   {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
-                  {isSpeaking ? "Stop" : "Listen"}
+                  {isSpeaking ? t("stop") : t("listen")}
                 </button>
               )}
             </div>
@@ -148,7 +144,6 @@ export const ChatInterface = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
       <div className="border-t border-border bg-card p-3">
         <div className="flex items-center gap-2">
           <button
@@ -163,7 +158,7 @@ export const ChatInterface = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="Describe your emergency..."
+            placeholder={t("describe_emergency")}
             className="flex-1 rounded-full border border-border bg-secondary px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <button
@@ -179,7 +174,7 @@ export const ChatInterface = () => {
             onClick={stopSpeaking}
             className="mt-2 w-full rounded-lg bg-danger/10 py-2 text-xs font-medium text-danger hover:bg-danger/20"
           >
-            🔇 Stop Speaking
+            {t("stop_speaking")}
           </button>
         )}
       </div>
@@ -190,13 +185,13 @@ export const ChatInterface = () => {
 function getSimulatedResponse(query: string, lang: string): string {
   const q = query.toLowerCase();
   if (q.includes("explosion") || q.includes("bomb") || q.includes("airstrike")) {
-    return `## 🚨 Immediate Action Required\n\n1. **DROP** to the ground immediately\n2. **MOVE** to the nearest concrete structure or basement\n3. **STAY AWAY** from windows and glass\n4. **COVER** your head and neck\n5. **WAIT** at least 10 minutes before moving\n\n⚠️ If you hear secondary explosions, remain sheltered. Do not go outside to investigate.`;
+    return `## 🚨 Immediate Action Required\n\n1. **DROP** to the ground immediately\n2. **MOVE** to the nearest concrete structure or basement\n3. **STAY AWAY** from windows and glass\n4. **COVER** your head and neck\n5. **WAIT** at least 10 minutes before moving\n\n⚠️ If you hear secondary explosions, remain sheltered.`;
   }
   if (q.includes("flood") || q.includes("water")) {
-    return `## 🌊 Flood Safety\n\n1. **Move to higher ground** immediately\n2. **Never walk** through moving water\n3. **Avoid** bridges over fast-moving water\n4. If trapped: go to the **highest floor** and signal for help\n5. **Do not** touch electrical equipment\n\n📍 Turn around, don't drown — 6 inches of water can knock you down.`;
+    return `## 🌊 Flood Safety\n\n1. **Move to higher ground** immediately\n2. **Never walk** through moving water\n3. **Avoid** bridges over fast-moving water\n4. If trapped: go to the **highest floor**\n5. **Do not** touch electrical equipment`;
   }
   if (q.includes("earthquake") || q.includes("shaking")) {
-    return `## 🌍 Earthquake Response\n\n1. **DROP, COVER, and HOLD ON**\n2. Get under a **sturdy table** or desk\n3. Stay away from **exterior walls**\n4. If outdoors: move to an **open area**\n5. After shaking: check for **gas leaks** and injuries\n\n⏱️ Aftershocks may follow — stay alert for 24 hours.`;
+    return `## 🌍 Earthquake Response\n\n1. **DROP, COVER, and HOLD ON**\n2. Get under a **sturdy table**\n3. Stay away from **exterior walls**\n4. If outdoors: move to an **open area**\n5. After shaking: check for **gas leaks**`;
   }
-  return `## 🛡️ General Safety Guidelines\n\n1. **Stay calm** — panic reduces survival chances\n2. **Seek shelter** in the nearest solid structure\n3. **Stay low** and away from windows\n4. **Conserve** your phone battery\n5. **Signal** for help if trapped\n\nTell me more about your specific situation and I'll provide targeted guidance.`;
+  return `## 🛡️ General Safety\n\n1. **Stay calm** — panic reduces survival chances\n2. **Seek shelter** in the nearest solid structure\n3. **Stay low** and away from windows\n4. **Conserve** your phone battery\n5. **Signal** for help if trapped\n\nTell me more about your specific situation.`;
 }
