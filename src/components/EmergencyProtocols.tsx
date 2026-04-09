@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { emergencyProtocols } from "@/lib/emergencyProtocols";
-import { ChevronRight, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/lib/translations";
 
 export const EmergencyProtocols = () => {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language.code);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = emergencyProtocols.find((p) => p.id === selectedId);
 
@@ -10,7 +14,7 @@ export const EmergencyProtocols = () => {
     <div className="space-y-3">
       <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
         <AlertTriangle className="h-4 w-4 text-warning" />
-        Emergency Protocols
+        {t("emergency_protocols")}
       </h2>
 
       {!selected ? (
@@ -33,7 +37,7 @@ export const EmergencyProtocols = () => {
               <span className="text-xl">{selected.icon}</span> {selected.title}
             </h3>
             <button onClick={() => setSelectedId(null)} className="text-xs text-muted-foreground hover:text-foreground">
-              ← Back
+              {t("back")}
             </button>
           </div>
           <ol className="space-y-2">
