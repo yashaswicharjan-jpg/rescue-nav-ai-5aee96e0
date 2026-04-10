@@ -118,7 +118,7 @@ export const MapView = () => {
         </MapContainer>
 
         {/* Legend */}
-        <div className="absolute bottom-2 left-2 z-[1000] flex gap-2 rounded-md bg-card/90 px-2 py-1 text-[10px] backdrop-blur">
+        <div className="absolute bottom-2 left-2 z-[1000] flex gap-2 rounded-md bg-background/90 px-2 py-1 text-[10px] backdrop-blur border border-border">
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-danger" />{t("danger")}</span>
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-safe" />{t("safe")}</span>
           <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-shelter" />{t("shelter")}</span>
