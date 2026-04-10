@@ -9,6 +9,7 @@ import Chat from "./pages/Chat.tsx";
 import Protocols from "./pages/Protocols.tsx";
 import Detect from "./pages/Detect.tsx";
 import Profile from "./pages/Profile.tsx";
+import Community from "./pages/Community.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/protocols" element={<Protocols />} />
             <Route path="/detect" element={<Detect />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/community" element={<Community />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
