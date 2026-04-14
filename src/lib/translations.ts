@@ -22,7 +22,11 @@ export type TranslationKey =
   | "no_internet" | "scanning_devices" | "connected_peers"
   | "type_message" | "broadcast_sms" | "sms_number" | "community_chat"
   | "bluetooth_status" | "bt_scanning" | "bt_connected" | "bt_unavailable"
-  | "sms_sent_success" | "enable_bluetooth" | "start_scan" | "stop_scan";
+  | "sms_sent_success" | "enable_bluetooth" | "start_scan" | "stop_scan"
+  | "phone_number" | "email" | "home_location" | "emergency_contact_2"
+  | "emergency_contact_3" | "sign_out" | "sign_in_google" | "signing_in"
+  | "view_emergency_info" | "sos_status_sent" | "sos_retry" | "loading_profile"
+  | "login_to_save";
 
 const translations: Record<string, Record<TranslationKey, string>> = {
   en: {
