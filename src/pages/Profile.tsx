@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SafePathHeader } from "@/components/SafePathHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
+import { useAuth } from "@/contexts/AuthContext";
+import { lovable } from "@/integrations/lovable/index";
 import { emergencyContactsByCountry, getContactsByCountry } from "@/lib/emergencyContacts";
-import { User, Phone, Heart, Shield, Save, Check, ChevronDown } from "lucide-react";
+import { User, Phone, Heart, Shield, Save, Check, ChevronDown, LogIn, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 interface UserProfile {
@@ -23,7 +25,9 @@ const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const Profile = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
+  const { user, loading, signOut } = useAuth();
   const [saved, setSaved] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
 
   const [profile, setProfile] = useState<UserProfile>(() => {
     const stored = localStorage.getItem("safepath_profile");
