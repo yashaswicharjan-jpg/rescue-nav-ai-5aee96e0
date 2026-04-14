@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Phone, AlertTriangle, MapPin, Loader2, Check, X } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Phone, AlertTriangle, Loader2, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
 import { toast } from "sonner";
@@ -7,66 +7,71 @@ import { toast } from "sonner";
 export const SOSButton = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
+  const [failed, setFailed] = useState(false);
 
-  const handleSOS = () => {
-    setShowConfirm(true);
-  };
+  const triggerSOS = useCallback(() => {
+    if (sending || sent) return;
 
-  const confirmSOS = () => {
+    // Vibrate for haptic feedback
+    navigator.vibrate?.([200, 100, 200]);
+
     setSending(true);
-    setShowConfirm(false);
+    setFailed(false);
 
-    // Get location and send emergency alert
+    const sendAlert = (lat?: number, lng?: number) => {
+      const profile = localStorage.getItem("safepath_profile");
+      const profileData = profile ? JSON.parse(profile) : {};
+
+      // Simulate sending SOS
+      setTimeout(() => {
+        setSending(false);
+        setSent(true);
+        setShowStatus(true);
+        navigator.vibrate?.([100]);
+
+        const locationStr = lat && lng
+          ? `${lat.toFixed(4)}, ${lng.toFixed(4)}`
+          : "";
+
+        toast.success(t("sos_sent"), {
+          description: locationStr ? `${t("sos_share_location")}: ${locationStr}` : undefined,
+          duration: 6000,
+        });
+
+        setTimeout(() => {
+          setSent(false);
+          setShowStatus(false);
+        }, 6000);
+      }, 1200);
+    };
+
     navigator.geolocation?.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        const profile = localStorage.getItem("safepath_profile");
-        const profileData = profile ? JSON.parse(profile) : {};
-
-        // Simulate sending SOS with location data
-        setTimeout(() => {
-          setSending(false);
-          setSent(true);
-          toast.success(t("sos_sent"), {
-            description: `${t("sos_share_location")}: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
-            duration: 5000,
-          });
-
-          // Try to call emergency number if profile has country
-          if (profileData.country) {
-            // Could trigger tel: link here
-          }
-
-          setTimeout(() => setSent(false), 4000);
-        }, 1500);
-      },
-      () => {
-        // Even without location, send SOS
-        setTimeout(() => {
-          setSending(false);
-          setSent(true);
-          toast.success(t("sos_sent"));
-          setTimeout(() => setSent(false), 4000);
-        }, 1500);
-      },
+      (pos) => sendAlert(pos.coords.latitude, pos.coords.longitude),
+      () => sendAlert(), // Send even without location
       { enableHighAccuracy: true, timeout: 5000 }
     );
+  }, [sending, sent, t]);
+
+  const retrySOS = () => {
+    setFailed(false);
+    triggerSOS();
   };
 
   return (
     <>
+      {/* Main SOS Button — single tap activation */}
       <button
-        onClick={handleSOS}
+        onClick={triggerSOS}
         disabled={sending}
-        className={`sos-pulse flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition-all ${
+        className={`flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition-all ${
           sent
             ? "bg-safe text-safe-foreground scale-110"
             : sending
             ? "bg-warning text-warning-foreground animate-pulse"
-            : "bg-danger text-danger-foreground"
+            : "bg-danger text-danger-foreground sos-pulse"
         }`}
         aria-label="SOS Emergency"
       >
@@ -82,33 +87,12 @@ export const SOSButton = () => {
         </div>
       </button>
 
-      {/* Confirmation dialog */}
-      {showConfirm && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4" onClick={() => setShowConfirm(false)}>
-          <div className="w-full max-w-sm rounded-xl border border-danger/50 bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-danger/20">
-                <AlertTriangle className="h-6 w-6 text-danger" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-danger">{t("sos_activated")}</h3>
-                <p className="text-xs text-muted-foreground">{t("sos_description")}</p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="flex-1 rounded-lg border border-border bg-secondary py-3 text-sm font-semibold text-secondary-foreground hover:bg-muted"
-              >
-                {t("sos_cancel")}
-              </button>
-              <button
-                onClick={confirmSOS}
-                className="flex-1 rounded-lg bg-danger py-3 text-sm font-bold text-danger-foreground hover:bg-danger/90 animate-pulse"
-              >
-                {t("sos_confirm")}
-              </button>
-            </div>
+      {/* SOS Sent Status Overlay */}
+      {showStatus && (
+        <div className="fixed inset-x-0 top-0 z-[9999] flex items-center justify-center bg-safe/95 px-4 py-4 shadow-lg animate-in slide-in-from-top">
+          <div className="flex items-center gap-3">
+            <Check className="h-6 w-6 text-safe-foreground" />
+            <span className="text-base font-bold text-safe-foreground">{t("sos_status_sent")}</span>
           </div>
         </div>
       )}
