@@ -2,6 +2,7 @@ import { SafePathHeader } from "@/components/SafePathHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { MapView } from "@/components/MapView";
 import { AlertCard } from "@/components/AlertCard";
+import { EmergencyInfoCard } from "@/components/EmergencyInfoCard";
 import { mockAlerts } from "@/lib/mockAlerts";
 import { AlertTriangle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,6 +17,11 @@ const Index = () => {
       <SafePathHeader />
 
       <main className="flex-1 overflow-y-auto pb-24">
+        {/* Emergency Info Quick Card */}
+        <div className="px-4 pt-3 pb-1">
+          <EmergencyInfoCard />
+        </div>
+
         {/* Map */}
         <div className="p-4 pb-2">
           <MapView />

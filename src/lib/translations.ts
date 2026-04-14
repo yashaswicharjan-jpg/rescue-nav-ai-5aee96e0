@@ -22,7 +22,11 @@ export type TranslationKey =
   | "no_internet" | "scanning_devices" | "connected_peers"
   | "type_message" | "broadcast_sms" | "sms_number" | "community_chat"
   | "bluetooth_status" | "bt_scanning" | "bt_connected" | "bt_unavailable"
-  | "sms_sent_success" | "enable_bluetooth" | "start_scan" | "stop_scan";
+  | "sms_sent_success" | "enable_bluetooth" | "start_scan" | "stop_scan"
+  | "phone_number" | "email" | "home_location" | "emergency_contact_2"
+  | "emergency_contact_3" | "sign_out" | "sign_in_google" | "signing_in"
+  | "view_emergency_info" | "sos_status_sent" | "sos_retry" | "loading_profile"
+  | "login_to_save";
 
 const translations: Record<string, Record<TranslationKey, string>> = {
   en: {
@@ -52,6 +56,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Bluetooth Status", bt_scanning: "Scanning...", bt_connected: "Connected", bt_unavailable: "Unavailable",
     sms_sent_success: "SMS sent successfully!", enable_bluetooth: "Enable Bluetooth",
     start_scan: "Start Scan", stop_scan: "Stop Scan",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   ar: {
     app_name: "كرايسس ناف AI", app_subtitle: "دليل النجاة بالذكاء الاصطناعي", live: "مباشر",
@@ -80,6 +89,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "حالة البلوتوث", bt_scanning: "جاري البحث...", bt_connected: "متصل", bt_unavailable: "غير متاح",
     sms_sent_success: "تم إرسال الرسالة بنجاح!", enable_bluetooth: "تفعيل البلوتوث",
     start_scan: "بدء البحث", stop_scan: "إيقاف البحث",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   fr: {
     app_name: "CrisisNav AI", app_subtitle: "Guide de survie IA", live: "EN DIRECT",
@@ -108,6 +122,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "État Bluetooth", bt_scanning: "Recherche...", bt_connected: "Connecté", bt_unavailable: "Indisponible",
     sms_sent_success: "SMS envoyé avec succès !", enable_bluetooth: "Activer Bluetooth",
     start_scan: "Démarrer la recherche", stop_scan: "Arrêter la recherche",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   es: {
     app_name: "CrisisNav AI", app_subtitle: "Guía de supervivencia IA", live: "EN VIVO",
@@ -136,6 +155,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Estado Bluetooth", bt_scanning: "Buscando...", bt_connected: "Conectado", bt_unavailable: "No disponible",
     sms_sent_success: "¡SMS enviado con éxito!", enable_bluetooth: "Activar Bluetooth",
     start_scan: "Iniciar búsqueda", stop_scan: "Detener búsqueda",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   hi: {
     app_name: "क्राइसिस नेव AI", app_subtitle: "AI सर्वाइवल गाइड", live: "लाइव",
@@ -164,6 +188,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "ब्लूटूथ स्थिति", bt_scanning: "खोज रहे हैं...", bt_connected: "जुड़ा हुआ", bt_unavailable: "अनुपलब्ध",
     sms_sent_success: "SMS सफलतापूर्वक भेजा गया!", enable_bluetooth: "ब्लूटूथ सक्षम करें",
     start_scan: "खोज शुरू करें", stop_scan: "खोज बंद करें",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   ur: {
     app_name: "کرائسس نیو AI", app_subtitle: "AI سروائیول گائیڈ", live: "لائیو",
@@ -192,6 +221,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "بلوٹوتھ حالت", bt_scanning: "تلاش جاری...", bt_connected: "جڑا ہوا", bt_unavailable: "دستیاب نہیں",
     sms_sent_success: "SMS کامیابی سے بھیجا گیا!", enable_bluetooth: "بلوٹوتھ فعال کریں",
     start_scan: "تلاش شروع کریں", stop_scan: "تلاش بند کریں",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   de: {
     app_name: "CrisisNav AI", app_subtitle: "KI-Überlebensführer", live: "LIVE",
@@ -220,6 +254,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Bluetooth-Status", bt_scanning: "Suche...", bt_connected: "Verbunden", bt_unavailable: "Nicht verfügbar",
     sms_sent_success: "SMS erfolgreich gesendet!", enable_bluetooth: "Bluetooth aktivieren",
     start_scan: "Suche starten", stop_scan: "Suche stoppen",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   zh: {
     app_name: "CrisisNav AI", app_subtitle: "AI生存指南", live: "实时",
@@ -248,6 +287,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "蓝牙状态", bt_scanning: "搜索中...", bt_connected: "已连接", bt_unavailable: "不可用",
     sms_sent_success: "短信发送成功！", enable_bluetooth: "启用蓝牙",
     start_scan: "开始搜索", stop_scan: "停止搜索",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   ja: {
     app_name: "CrisisNav AI", app_subtitle: "AIサバイバルガイド", live: "ライブ",
@@ -276,6 +320,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Bluetooth状態", bt_scanning: "検索中...", bt_connected: "接続済み", bt_unavailable: "利用不可",
     sms_sent_success: "SMS送信成功！", enable_bluetooth: "Bluetoothを有効にする",
     start_scan: "検索開始", stop_scan: "検索停止",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   ko: {
     app_name: "CrisisNav AI", app_subtitle: "AI 생존 가이드", live: "실시간",
@@ -304,6 +353,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "블루투스 상태", bt_scanning: "검색 중...", bt_connected: "연결됨", bt_unavailable: "사용 불가",
     sms_sent_success: "SMS 전송 성공!", enable_bluetooth: "블루투스 활성화",
     start_scan: "검색 시작", stop_scan: "검색 중지",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   tr: {
     app_name: "CrisisNav AI", app_subtitle: "AI Hayatta Kalma Rehberi", live: "CANLI",
@@ -332,6 +386,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Bluetooth Durumu", bt_scanning: "Aranıyor...", bt_connected: "Bağlı", bt_unavailable: "Kullanılamıyor",
     sms_sent_success: "SMS başarıyla gönderildi!", enable_bluetooth: "Bluetooth'u Etkinleştir",
     start_scan: "Aramayı Başlat", stop_scan: "Aramayı Durdur",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   pt: {
     app_name: "CrisisNav AI", app_subtitle: "Guia de Sobrevivência IA", live: "AO VIVO",
@@ -360,6 +419,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Status Bluetooth", bt_scanning: "Buscando...", bt_connected: "Conectado", bt_unavailable: "Indisponível",
     sms_sent_success: "SMS enviado com sucesso!", enable_bluetooth: "Ativar Bluetooth",
     start_scan: "Iniciar Busca", stop_scan: "Parar Busca",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   ru: {
     app_name: "CrisisNav AI", app_subtitle: "ИИ Руководство по выживанию", live: "ОНЛАЙН",
@@ -388,6 +452,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Статус Bluetooth", bt_scanning: "Поиск...", bt_connected: "Подключено", bt_unavailable: "Недоступно",
     sms_sent_success: "SMS отправлено!", enable_bluetooth: "Включить Bluetooth",
     start_scan: "Начать поиск", stop_scan: "Остановить поиск",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   uk: {
     app_name: "CrisisNav AI", app_subtitle: "ШІ Посібник з виживання", live: "НАЖИВО",
@@ -416,6 +485,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Статус Bluetooth", bt_scanning: "Пошук...", bt_connected: "Підключено", bt_unavailable: "Недоступно",
     sms_sent_success: "SMS надіслано!", enable_bluetooth: "Увімкнути Bluetooth",
     start_scan: "Почати пошук", stop_scan: "Зупинити пошук",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   fa: {
     app_name: "CrisisNav AI", app_subtitle: "راهنمای بقا AI", live: "زنده",
@@ -444,6 +518,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "وضعیت بلوتوث", bt_scanning: "جستجو...", bt_connected: "متصل", bt_unavailable: "غیرقابل دسترس",
     sms_sent_success: "پیامک با موفقیت ارسال شد!", enable_bluetooth: "فعال کردن بلوتوث",
     start_scan: "شروع جستجو", stop_scan: "توقف جستجو",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   he: {
     app_name: "CrisisNav AI", app_subtitle: "מדריך הישרדות AI", live: "שידור חי",
@@ -472,6 +551,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "סטטוס Bluetooth", bt_scanning: "מחפש...", bt_connected: "מחובר", bt_unavailable: "לא זמין",
     sms_sent_success: "SMS נשלח בהצלחה!", enable_bluetooth: "הפעל Bluetooth",
     start_scan: "התחל חיפוש", stop_scan: "עצור חיפוש",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   sw: {
     app_name: "CrisisNav AI", app_subtitle: "Mwongozo wa Kuishi AI", live: "MOJA KWA MOJA",
@@ -500,6 +584,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "Hali ya Bluetooth", bt_scanning: "Inatafuta...", bt_connected: "Imeunganishwa", bt_unavailable: "Haipatikani",
     sms_sent_success: "SMS imetumwa!", enable_bluetooth: "Washa Bluetooth",
     start_scan: "Anza Kutafuta", stop_scan: "Acha Kutafuta",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
   bn: {
     app_name: "CrisisNav AI", app_subtitle: "AI সার্ভাইভাল গাইড", live: "লাইভ",
@@ -528,6 +617,11 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     bluetooth_status: "ব্লুটুথ স্থিতি", bt_scanning: "খুঁজছে...", bt_connected: "সংযুক্ত", bt_unavailable: "অনুপলব্ধ",
     sms_sent_success: "SMS সফলভাবে পাঠানো হয়েছে!", enable_bluetooth: "ব্লুটুথ সক্রিয় করুন",
     start_scan: "খোঁজ শুরু করুন", stop_scan: "খোঁজ বন্ধ করুন",
+    phone_number: "Phone Number", email: "Email", home_location: "Home Location",
+    emergency_contact_2: "Emergency Contact 2", emergency_contact_3: "Emergency Contact 3",
+    sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
+    view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
+    sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
   },
 };
 

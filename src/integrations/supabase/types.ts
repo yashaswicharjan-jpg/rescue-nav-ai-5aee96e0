@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          allergies: string | null
+          avatar_url: string | null
+          blood_group: string | null
+          country: string | null
+          created_at: string
+          email: string | null
+          emergency_contact_1_name: string | null
+          emergency_contact_1_phone: string | null
+          emergency_contact_2_name: string | null
+          emergency_contact_2_phone: string | null
+          emergency_contact_3_name: string | null
+          emergency_contact_3_phone: string | null
+          full_name: string | null
+          home_location: string | null
+          id: string
+          language_preference: string | null
+          medical_conditions: string | null
+          phone_number: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allergies?: string | null
+          avatar_url?: string | null
+          blood_group?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          emergency_contact_1_name?: string | null
+          emergency_contact_1_phone?: string | null
+          emergency_contact_2_name?: string | null
+          emergency_contact_2_phone?: string | null
+          emergency_contact_3_name?: string | null
+          emergency_contact_3_phone?: string | null
+          full_name?: string | null
+          home_location?: string | null
+          id?: string
+          language_preference?: string | null
+          medical_conditions?: string | null
+          phone_number?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allergies?: string | null
+          avatar_url?: string | null
+          blood_group?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          emergency_contact_1_name?: string | null
+          emergency_contact_1_phone?: string | null
+          emergency_contact_2_name?: string | null
+          emergency_contact_2_phone?: string | null
+          emergency_contact_3_name?: string | null
+          emergency_contact_3_phone?: string | null
+          full_name?: string | null
+          home_location?: string | null
+          id?: string
+          language_preference?: string | null
+          medical_conditions?: string | null
+          phone_number?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
