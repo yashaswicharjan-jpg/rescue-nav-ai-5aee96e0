@@ -26,9 +26,11 @@ export type TranslationKey =
   | "phone_number" | "email" | "home_location" | "emergency_contact_2"
   | "emergency_contact_3" | "sign_out" | "sign_in_google" | "signing_in"
   | "view_emergency_info" | "sos_status_sent" | "sos_retry" | "loading_profile"
-  | "login_to_save";
+  | "login_to_save"
+  | "nav_distance" | "nav_time" | "nav_safe_route" | "nav_step" | "nav_to"
+  | "nav_navigate_safety" | "nav_avoid_area" | "nav_action_steps";
 
-const translations: Record<string, Record<TranslationKey, string>> = {
+const translations: Record<string, Partial<Record<TranslationKey, string>>> = {
   en: {
     app_name: "CrisisNav AI", app_subtitle: "AI Survival Guide", live: "LIVE",
     active_alerts: "Active Alerts", disclaimer: "⚖️ CrisisNav AI is a decision support system, not an authority. Always verify with official emergency services.",
@@ -61,6 +63,8 @@ const translations: Record<string, Record<TranslationKey, string>> = {
     sign_out: "Sign Out", sign_in_google: "Sign in with Google", signing_in: "Signing in...",
     view_emergency_info: "View Emergency Info", sos_status_sent: "SOS SENT — Help is on the way",
     sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
+    nav_distance: "Distance", nav_time: "Est. Time", nav_safe_route: "Safe Route", nav_step: "Step", nav_to: "to",
+    nav_navigate_safety: "Navigate to Safety", nav_avoid_area: "Avoid this area", nav_action_steps: "Action Steps",
   },
   ar: {
     app_name: "كرايسس ناف AI", app_subtitle: "دليل النجاة بالذكاء الاصطناعي", live: "مباشر",

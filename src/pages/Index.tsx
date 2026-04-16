@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import { SafePathHeader } from "@/components/SafePathHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { MapView } from "@/components/MapView";
 import { AlertCard } from "@/components/AlertCard";
 import { EmergencyInfoCard } from "@/components/EmergencyInfoCard";
-import { mockAlerts } from "@/lib/mockAlerts";
+import { NavigationOverlay } from "@/components/NavigationOverlay";
+import { mockAlerts, type Alert } from "@/lib/mockAlerts";
 import { AlertTriangle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
@@ -11,6 +13,15 @@ import { useTranslation } from "@/lib/translations";
 const Index = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
+  const [navAlert, setNavAlert] = useState<Alert | null>(null);
+  const [userPos, setUserPos] = useState<[number, number]>([33.88, 35.50]);
+
+  useEffect(() => {
+    navigator.geolocation?.getCurrentPosition(
+      (pos) => setUserPos([pos.coords.latitude, pos.coords.longitude]),
+      () => {}
+    );
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -38,7 +49,11 @@ const Index = () => {
           </h2>
           <div className="space-y-2">
             {mockAlerts.map((alert) => (
-              <AlertCard key={alert.id} alert={alert} />
+              <AlertCard
+                key={alert.id}
+                alert={alert}
+                onNavigate={(a) => setNavAlert(a)}
+              />
             ))}
           </div>
         </div>
@@ -52,6 +67,15 @@ const Index = () => {
       </main>
 
       <BottomNav />
+
+      {/* Full-screen navigation overlay */}
+      {navAlert && (
+        <NavigationOverlay
+          alert={navAlert}
+          userPos={userPos}
+          onClose={() => setNavAlert(null)}
+        />
+      )}
     </div>
   );
 };
