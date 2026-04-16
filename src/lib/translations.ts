@@ -30,7 +30,7 @@ export type TranslationKey =
   | "nav_distance" | "nav_time" | "nav_safe_route" | "nav_step" | "nav_to"
   | "nav_navigate_safety" | "nav_avoid_area" | "nav_action_steps";
 
-const translations: Record<string, Record<TranslationKey, string>> = {
+const translations: Record<string, Partial<Record<TranslationKey, string>>> = {
   en: {
     app_name: "CrisisNav AI", app_subtitle: "AI Survival Guide", live: "LIVE",
     active_alerts: "Active Alerts", disclaimer: "⚖️ CrisisNav AI is a decision support system, not an authority. Always verify with official emergency services.",
