@@ -28,7 +28,9 @@ export type TranslationKey =
   | "view_emergency_info" | "sos_status_sent" | "sos_retry" | "loading_profile"
   | "login_to_save"
   | "nav_distance" | "nav_time" | "nav_safe_route" | "nav_step" | "nav_to"
-  | "nav_navigate_safety" | "nav_avoid_area" | "nav_action_steps";
+  | "nav_navigate_safety" | "nav_avoid_area" | "nav_action_steps"
+  | "resources" | "find_resources" | "nearby_essentials" | "resources_error"
+  | "loading" | "no_resources" | "safety" | "compare_routes";
 
 const translations: Record<string, Partial<Record<TranslationKey, string>>> = {
   en: {
@@ -65,6 +67,9 @@ const translations: Record<string, Partial<Record<TranslationKey, string>>> = {
     sos_retry: "Retry", loading_profile: "Loading profile...", login_to_save: "Sign in to save your profile securely",
     nav_distance: "Distance", nav_time: "Est. Time", nav_safe_route: "Safe Route", nav_step: "Step", nav_to: "to",
     nav_navigate_safety: "Navigate to Safety", nav_avoid_area: "Avoid this area", nav_action_steps: "Action Steps",
+    resources: "Resources", find_resources: "Find Resources", nearby_essentials: "Nearby hospitals, water, shelter & charging",
+    resources_error: "Failed to load resources. Check your connection.", loading: "Searching nearby...",
+    no_resources: "No resources found within 5km.", safety: "SAFETY", compare_routes: "Compare Safe vs Fast Route",
   },
   ar: {
     app_name: "كرايسس ناف AI", app_subtitle: "دليل النجاة بالذكاء الاصطناعي", live: "مباشر",
