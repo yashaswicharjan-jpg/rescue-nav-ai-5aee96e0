@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle, ZoomControl, useMap } from "react-leaflet";
 import L from "leaflet";
 import { mockAlerts } from "@/lib/mockAlerts";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -27,9 +27,10 @@ const shelterIcon = new L.DivIcon({
 });
 
 const userIcon = new L.DivIcon({
-  html: '<div style="background:hsl(142,70%,45%);width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 0 10px rgba(34,197,94,0.5);"></div>',
+  html: '<div class="user-beacon"><div class="user-beacon-ring"></div><div class="user-beacon-dot"></div></div>',
   className: "",
-  iconSize: [16, 16],
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
 });
 
 const shelters = [
@@ -81,12 +82,28 @@ export const MapView = () => {
 
   return (
     <div className="space-y-2">
-      <div className="relative h-[400px] w-full overflow-hidden rounded-lg border border-border">
-        <MapContainer center={userPos} zoom={13} className="h-full w-full" zoomControl={false}>
+      <div className="relative h-[400px] w-full overflow-hidden rounded-lg border border-border map-container" style={{ height: "400px" }}>
+        <MapContainer
+          center={userPos}
+          zoom={13}
+          minZoom={2}
+          maxZoom={19}
+          zoomControl={false}
+          scrollWheelZoom={true}
+          doubleClickZoom={true}
+          touchZoom={true}
+          dragging={true}
+          className="h-full w-full"
+        >
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            maxZoom={19}
+            minZoom={2}
+            tileSize={256}
+            zoomOffset={0}
           />
+          <ZoomControl position="topleft" />
           <RecenterMap center={userPos} />
 
           {/* User position */}
