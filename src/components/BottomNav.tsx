@@ -1,4 +1,4 @@
-import { Map, MessageCircle, Shield, Camera, Users } from "lucide-react";
+import { Map, MessageCircle, Shield, LifeBuoy, Users } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
@@ -12,9 +12,9 @@ export const BottomNav = () => {
 
   const navItems = [
     { icon: Map, label: t("map"), path: "/" },
+    { icon: LifeBuoy, label: t("resources") || "Resources", path: "/resources" },
     { icon: MessageCircle, label: t("ai_chat"), path: "/chat" },
     { icon: Shield, label: t("protocols"), path: "/protocols" },
-    { icon: Camera, label: t("detect"), path: "/detect" },
     { icon: Users, label: t("community"), path: "/community" },
   ];
 
