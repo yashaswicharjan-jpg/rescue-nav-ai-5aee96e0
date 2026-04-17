@@ -17,9 +17,10 @@ L.Icon.Default.mergeOptions({
 });
 
 const userIcon = new L.DivIcon({
-  html: '<div style="background:hsl(142,70%,45%);width:18px;height:18px;border-radius:50%;border:3px solid white;box-shadow:0 0 12px rgba(34,197,94,0.6);"></div>',
+  html: '<div class="user-beacon"><div class="user-beacon-ring"></div><div class="user-beacon-dot"></div></div>',
   className: "",
   iconSize: [18, 18],
+  iconAnchor: [9, 9],
 });
 
 const shelterIcon = new L.DivIcon({
@@ -136,12 +137,22 @@ export const NavigationOverlay = ({ alert, userPos, onClose }: Props) => {
         <MapContainer
           center={userPos}
           zoom={15}
+          minZoom={2}
+          maxZoom={19}
           className="h-full w-full"
-          zoomControl={false}
+          zoomControl={true}
+          scrollWheelZoom={true}
+          doubleClickZoom={true}
+          touchZoom={true}
+          dragging={true}
         >
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            maxZoom={19}
+            minZoom={2}
+            tileSize={256}
+            zoomOffset={0}
           />
           <FitBounds waypoints={route.waypoints} />
 
