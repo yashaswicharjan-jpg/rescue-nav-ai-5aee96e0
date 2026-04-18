@@ -5,8 +5,9 @@ import { MapView } from "@/components/MapView";
 import { AlertCard } from "@/components/AlertCard";
 import { EmergencyInfoCard } from "@/components/EmergencyInfoCard";
 import { NavigationOverlay } from "@/components/NavigationOverlay";
+import { FloodDemoOverlay } from "@/components/FloodDemoOverlay";
 import { mockAlerts, type Alert } from "@/lib/mockAlerts";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Waves } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
 
@@ -14,6 +15,7 @@ const Index = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
   const [navAlert, setNavAlert] = useState<Alert | null>(null);
+  const [showFloodDemo, setShowFloodDemo] = useState(false);
   const [userPos, setUserPos] = useState<[number, number]>([33.88, 35.50]);
 
   useEffect(() => {
@@ -68,6 +70,16 @@ const Index = () => {
 
       <BottomNav />
 
+      {/* Flood demo trigger */}
+      <button
+        onClick={() => setShowFloodDemo(true)}
+        className="fixed bottom-24 left-4 z-40 flex items-center gap-1.5 rounded-full bg-primary px-3 py-2 text-xs font-bold text-primary-foreground shadow-lg hover:opacity-90"
+        aria-label="Run flood demo"
+      >
+        <Waves className="h-3.5 w-3.5" />
+        Run Flood Demo
+      </button>
+
       {/* Full-screen navigation overlay */}
       {navAlert && (
         <NavigationOverlay
@@ -76,6 +88,8 @@ const Index = () => {
           onClose={() => setNavAlert(null)}
         />
       )}
+
+      {showFloodDemo && <FloodDemoOverlay onClose={() => setShowFloodDemo(false)} />}
     </div>
   );
 };

@@ -1,74 +1,47 @@
 import { useState, useCallback } from "react";
-import { Phone, AlertTriangle, Loader2, Check } from "lucide-react";
+import { Phone, Loader2, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
 import { toast } from "sonner";
+import { SOSStatusModal } from "./SOSStatusModal";
 
 export const SOSButton = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
   const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [showStatus, setShowStatus] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | undefined>();
 
   const triggerSOS = useCallback(() => {
-    if (sending || sent) return;
-
-    // Vibrate for haptic feedback
+    if (sending || showModal) return;
     navigator.vibrate?.([200, 100, 200]);
-
     setSending(true);
-    setFailed(false);
 
-    const sendAlert = (lat?: number, lng?: number) => {
-      const profile = localStorage.getItem("safepath_profile");
-      const profileData = profile ? JSON.parse(profile) : {};
-
-      // Simulate sending SOS
+    const launchModal = (lat?: number, lng?: number) => {
       setTimeout(() => {
         setSending(false);
-        setSent(true);
-        setShowStatus(true);
+        setLocation(lat && lng ? { lat, lng } : undefined);
+        setShowModal(true);
         navigator.vibrate?.([100]);
-
-        const locationStr = lat && lng
-          ? `${lat.toFixed(4)}, ${lng.toFixed(4)}`
-          : "";
-
-        toast.success(t("sos_sent"), {
-          description: locationStr ? `${t("sos_share_location")}: ${locationStr}` : undefined,
-          duration: 6000,
-        });
-
-        setTimeout(() => {
-          setSent(false);
-          setShowStatus(false);
-        }, 6000);
-      }, 1200);
+        toast.success(t("sos_sent"), { duration: 3000 });
+      }, 600);
     };
 
     navigator.geolocation?.getCurrentPosition(
-      (pos) => sendAlert(pos.coords.latitude, pos.coords.longitude),
-      () => sendAlert(), // Send even without location
+      (pos) => launchModal(pos.coords.latitude, pos.coords.longitude),
+      () => launchModal(),
       { enableHighAccuracy: true, timeout: 5000 }
     );
-  }, [sending, sent, t]);
-
-  const retrySOS = () => {
-    setFailed(false);
-    triggerSOS();
-  };
+  }, [sending, showModal, t]);
 
   return (
     <>
-      {/* Main SOS Button — single tap activation */}
       <button
         onClick={triggerSOS}
-        disabled={sending}
+        disabled={sending || showModal}
         className={`flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition-all ${
-          sent
-            ? "bg-safe text-safe-foreground scale-110"
+          showModal
+            ? "bg-safe text-safe-foreground"
             : sending
             ? "bg-warning text-warning-foreground animate-pulse"
             : "bg-danger text-danger-foreground sos-pulse"
@@ -78,7 +51,7 @@ export const SOSButton = () => {
         <div className="text-center">
           {sending ? (
             <Loader2 className="mx-auto h-6 w-6 animate-spin" />
-          ) : sent ? (
+          ) : showModal ? (
             <Check className="mx-auto h-6 w-6" />
           ) : (
             <Phone className="mx-auto h-6 w-6" />
@@ -87,14 +60,15 @@ export const SOSButton = () => {
         </div>
       </button>
 
-      {/* SOS Sent Status Overlay */}
-      {showStatus && (
-        <div className="fixed inset-x-0 top-0 z-[9999] flex items-center justify-center bg-safe/95 px-4 py-4 shadow-lg animate-in slide-in-from-top">
-          <div className="flex items-center gap-3">
-            <Check className="h-6 w-6 text-safe-foreground" />
-            <span className="text-base font-bold text-safe-foreground">{t("sos_status_sent")}</span>
-          </div>
-        </div>
+      {showModal && (
+        <SOSStatusModal
+          location={location}
+          onClose={() => setShowModal(false)}
+          onSafe={() => {
+            setShowModal(false);
+            toast.success("Marked safe. Contacts notified.", { duration: 4000 });
+          }}
+        />
       )}
     </>
   );
