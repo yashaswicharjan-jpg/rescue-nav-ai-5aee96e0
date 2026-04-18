@@ -1,13 +1,17 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { Send, Mic, MicOff, Volume2, VolumeX, Camera, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
+  imagePreview?: string;
+  isLoading?: boolean;
 }
 
 export const ChatInterface = () => {
@@ -24,11 +28,12 @@ export const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef(window.speechSynthesis);
 
-  // Update welcome message when language changes
   useEffect(() => {
     setMessages((prev) => prev.map((m) =>
       m.id === "welcome" ? { ...m, content: `## ${t("welcome_title")}\n\n${t("welcome_msg")}` } : m
@@ -60,16 +65,13 @@ export const ChatInterface = () => {
       setIsListening(false);
       return;
     }
-
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
-
     const recognition = new SpeechRecognition();
     recognition.lang = language.code;
     recognition.interimResults = false;
     recognition.onresult = (e: any) => {
-      const transcript = e.results[0][0].transcript;
-      setInput(transcript);
+      setInput(e.results[0][0].transcript);
       setIsListening(false);
     };
     recognition.onerror = () => setIsListening(false);
@@ -79,12 +81,65 @@ export const ChatInterface = () => {
     setIsListening(true);
   };
 
+  const handleImageCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const previewURL = URL.createObjectURL(file);
+    setImagePreview(previewURL);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      analyzeImage(base64, file.type, previewURL);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const analyzeImage = async (base64Data: string, mimeType: string, previewURL: string) => {
+    setIsLoading(true);
+    const userText = input.trim();
+    setInput("");
+
+    const userMsgId = Date.now().toString();
+    const loadingId = (Date.now() + 1).toString();
+    setMessages((prev) => [
+      ...prev,
+      { id: userMsgId, role: "user", content: userText || "📷 Photo sent for crisis analysis", imagePreview: previewURL },
+      { id: loadingId, role: "assistant", content: "Analyzing image...", isLoading: true },
+    ]);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("analyze-crisis-image", {
+        body: { imageBase64: base64Data, mimeType, userText, language: language.code },
+      });
+
+      if (error) throw error;
+
+      const reply = data?.reply || "Unable to analyze image. Call emergency services: 112 / 911 / 999.";
+      setMessages((prev) => prev.map((m) =>
+        m.id === loadingId ? { ...m, content: reply, isLoading: false } : m
+      ));
+    } catch (err: any) {
+      const msg = err?.message?.includes("429")
+        ? "Too many requests. Please wait a moment and try again."
+        : err?.message?.includes("402")
+        ? "AI credits exhausted. Please add funds in workspace settings."
+        : "Analysis failed. If in danger, call emergency services immediately: 112 / 911 / 999.";
+      toast.error(msg);
+      setMessages((prev) => prev.map((m) =>
+        m.id === loadingId ? { ...m, content: msg, isLoading: false } : m
+      ));
+    } finally {
+      setIsLoading(false);
+      setImagePreview(null);
+    }
+  };
+
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
-
     const userMsg: Message = { id: Date.now().toString(), role: "user", content: input.trim() };
-    const newMessages = [...messages, userMsg];
-    setMessages(newMessages);
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
 
@@ -111,14 +166,28 @@ export const ChatInterface = () => {
                   : "bg-secondary text-secondary-foreground rounded-bl-md"
               }`}
             >
-              {msg.role === "assistant" ? (
+              {msg.imagePreview && (
+                <img
+                  src={msg.imagePreview}
+                  alt="Sent for analysis"
+                  className="mb-2 max-h-48 w-full rounded-lg border border-border object-cover"
+                />
+              )}
+              {msg.isLoading ? (
+                <div className="flex items-center gap-2 py-1">
+                  <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: "0ms" }} />
+                  <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: "150ms" }} />
+                  <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: "300ms" }} />
+                  <span className="ml-1 text-xs text-muted-foreground">{msg.content}</span>
+                </div>
+              ) : msg.role === "assistant" ? (
                 <div className="prose prose-sm prose-invert max-w-none">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
               ) : (
                 msg.content
               )}
-              {msg.role === "assistant" && msg.id !== "welcome" && (
+              {msg.role === "assistant" && !msg.isLoading && msg.id !== "welcome" && (
                 <button
                   onClick={() => (isSpeaking ? stopSpeaking() : speak(msg.content))}
                   className="mt-1.5 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"
@@ -130,22 +199,40 @@ export const ChatInterface = () => {
             </div>
           </div>
         ))}
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="rounded-2xl rounded-bl-md bg-secondary px-4 py-3">
-              <div className="flex gap-1">
-                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: "0ms" }} />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: "150ms" }} />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: "300ms" }} />
-              </div>
-            </div>
-          </div>
-        )}
         <div ref={messagesEndRef} />
       </div>
 
+      {imagePreview && (
+        <div className="flex items-center gap-3 border-t border-border bg-secondary/50 px-3 py-2">
+          <img src={imagePreview} alt="Preview" className="h-12 w-12 rounded-md border border-border object-cover" />
+          <span className="flex-1 text-xs text-muted-foreground">📷 Photo ready — analyzing now...</span>
+          <button
+            onClick={() => setImagePreview(null)}
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-muted hover:bg-muted/70"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
       <div className="border-t border-border bg-card p-3">
         <div className="flex items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={handleImageCapture}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isLoading}
+            title="Send photo for crisis analysis"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-danger text-danger-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+          >
+            <Camera className="h-4 w-4" />
+          </button>
           <button
             onClick={toggleListening}
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
