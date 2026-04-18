@@ -1,11 +1,17 @@
-import { Shield, Zap } from "lucide-react";
+import { Shield, Zap, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
+import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSelector } from "./LanguageSelector";
 
 export const SafePathHeader = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const initials = (user?.user_metadata?.full_name || user?.email || "")
+    .split(" ").map((s: string) => s[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
@@ -26,6 +32,19 @@ export const SafePathHeader = () => {
             <span className="text-xs font-medium text-safe">{t("live")}</span>
           </div>
           <LanguageSelector />
+          <button
+            onClick={() => navigate("/profile")}
+            aria-label="Profile"
+            className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary text-foreground transition-colors hover:bg-muted"
+          >
+            {user?.user_metadata?.avatar_url ? (
+              <img src={user.user_metadata.avatar_url} alt="" className="h-full w-full object-cover" />
+            ) : initials ? (
+              <span className="text-xs font-bold">{initials}</span>
+            ) : (
+              <User className="h-4 w-4" />
+            )}
+          </button>
         </div>
       </div>
     </header>
