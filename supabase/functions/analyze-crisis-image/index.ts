@@ -52,7 +52,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3.1-flash-image-preview",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT + langInstruction },
+          { role: "system", content: SYSTEM_PROMPT + langInstruction + profileContext },
           {
             role: "user",
             content: [
