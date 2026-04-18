@@ -32,6 +32,19 @@ export const SafePathHeader = () => {
             <span className="text-xs font-medium text-safe">{t("live")}</span>
           </div>
           <LanguageSelector />
+          <button
+            onClick={() => navigate("/profile")}
+            aria-label="Profile"
+            className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary text-foreground transition-colors hover:bg-muted"
+          >
+            {user?.user_metadata?.avatar_url ? (
+              <img src={user.user_metadata.avatar_url} alt="" className="h-full w-full object-cover" />
+            ) : initials ? (
+              <span className="text-xs font-bold">{initials}</span>
+            ) : (
+              <User className="h-4 w-4" />
+            )}
+          </button>
         </div>
       </div>
     </header>
