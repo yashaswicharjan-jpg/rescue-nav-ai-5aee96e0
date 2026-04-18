@@ -5,6 +5,7 @@ import { useTranslation } from "@/lib/translations";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { getUserProfileContext } from "@/lib/userProfile";
 
 interface Message {
   id: string;
@@ -110,8 +111,9 @@ export const ChatInterface = () => {
     ]);
 
     try {
+      const profile = await getUserProfileContext();
       const { data, error } = await supabase.functions.invoke("analyze-crisis-image", {
-        body: { imageBase64: base64Data, mimeType, userText, language: language.code },
+        body: { imageBase64: base64Data, mimeType, userText, language: language.code, profile },
       });
 
       if (error) throw error;

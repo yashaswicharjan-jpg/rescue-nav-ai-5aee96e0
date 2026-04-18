@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, mimeType, userText, language } = await req.json();
+    const { imageBase64, mimeType, userText, language, profile } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
     if (!imageBase64) throw new Error("imageBase64 required");
@@ -32,6 +32,15 @@ Deno.serve(async (req) => {
     const dataUrl = `data:${mimeType || "image/jpeg"};base64,${imageBase64}`;
     const langInstruction = language && language !== "en"
       ? `\n\nIMPORTANT: Respond entirely in language code "${language}".`
+      : "";
+
+    const profileContext = profile && (profile.full_name || profile.blood_group || profile.medical_conditions)
+      ? `\n\nUSER PROFILE (use to personalize advice — mention conditions/allergies if relevant to the crisis):
+- Name: ${profile.full_name || "Unknown"}
+- Blood group: ${profile.blood_group || "Unknown"}
+- Medical conditions: ${profile.medical_conditions || "None"}
+- Allergies: ${profile.allergies || "None"}
+- Country: ${profile.country || "Unknown"}`
       : "";
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -43,7 +52,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3.1-flash-image-preview",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT + langInstruction },
+          { role: "system", content: SYSTEM_PROMPT + langInstruction + profileContext },
           {
             role: "user",
             content: [
