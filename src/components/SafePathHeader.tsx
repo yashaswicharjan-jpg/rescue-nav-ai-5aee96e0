@@ -1,11 +1,17 @@
-import { Shield, Zap } from "lucide-react";
+import { Shield, Zap, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "@/lib/translations";
+import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSelector } from "./LanguageSelector";
 
 export const SafePathHeader = () => {
   const { language } = useLanguage();
   const { t } = useTranslation(language.code);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const initials = (user?.user_metadata?.full_name || user?.email || "")
+    .split(" ").map((s: string) => s[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
