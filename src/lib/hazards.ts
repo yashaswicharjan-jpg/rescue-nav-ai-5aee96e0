@@ -9,6 +9,7 @@ const KEY = "crisisnav.hazards";
 export interface HazardReport {
   id: string;
   regionId: string;
+  type: "airstrike" | "flood" | "earthquake" | "fire" | "riot";
   title: string;
   description: string;
   severity: "critical" | "high" | "moderate";
@@ -73,6 +74,7 @@ export function clearDrills() {
 export function addDrillHazard(center: [number, number]): HazardReport {
   const offsetDeg = 0.008;
   return addHazard({
+    type: "flood",
     title: "DRILL — Flash flood zone",
     description:
       "Training scenario only. Not a real emergency. Used to rehearse evacuation routing.",
@@ -86,17 +88,18 @@ export function addDrillHazard(center: [number, number]): HazardReport {
 }
 
 /** Adapts a hazard report to the legacy Alert shape used by navigation UI. */
-export function hazardToAlert(h: HazardReport): Alert {
+export function hazardToAlert(h: HazardReport, userPos?: [number, number]): Alert {
+  const d = userPos ? distanceM(userPos, [h.lat, h.lng]) : 0;
   return {
     id: h.id,
+    type: h.type,
     title: h.title,
     description: h.description,
     severity: h.severity === "moderate" ? "medium" : h.severity,
     confidence: h.confidence === "confirmed" ? "high" : h.confidence === "likely" ? "medium" : "low",
     lat: h.lat,
     lng: h.lng,
-    distance: 0,
+    distance: d < 1000 ? `${Math.round(d)} m` : `${(d / 1000).toFixed(1)} km`,
     time: new Date(h.createdAt).toLocaleTimeString(),
-    action: "Move away from the affected area and follow the safe route.",
-  } as Alert;
+  };
 }
